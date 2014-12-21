@@ -39,6 +39,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     text = db.Column(db.String)
+    published = db.Column(db.Boolean)
     slug = db.Column(db.String)
     create_time = db.Column(db.DateTime)
     last_edit_time = db.Column(db.DateTime)
