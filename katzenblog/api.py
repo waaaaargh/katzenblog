@@ -1,11 +1,11 @@
 from flask.ext.restful import Resource
 
 from katzenblog import api
-from katzenblog.model import Post, User
+from katzenblog.model import Post, User, Category
 
 from katzenblog.auth import requires_auth
 
-class PostsResource(Resource):
+class PublicPostsResource(Resource):
     def get(self):
         return [ { "id": p.id,
                    "title": p.title, 
@@ -15,14 +15,18 @@ class PostsResource(Resource):
                               "screenname": p.owner.screenname },
                    "create_time": p.create_time.isoformat(),
                    "last_edited_on": p.last_edit_time.isoformat() } for p in Post.query.all() ]
-api.add_resource(PostsResource, 'posts')
+api.add_resource(PublicPostsResource, 'posts')
 
-class UserResource(Resource):
-    @requires_auth
-    def get(self, auth_username):
-        u = User.query.filter(User.username==auth_username).one()
-        return { "id": u.id,
-                 "username": u.username,
-                 "screenname": u.screenname,
-                 "bio": u.bio }
-api.add_resource(UserResource, 'user')
+class PublicUserResource(Resource):
+    def get(self):
+        return [ { "id": u.id,
+                   "username": u.username,
+                   "screenname": u.screenname,
+                   "bio": u.bio } for u in User.query.all() ]
+api.add_resource(PublicUserResource, 'user')
+
+class PublicCategoryResource(Resource):
+    def get(self):
+        return [ { "id": c.id,
+                   "title": c.name } for c in Category.query.all() ]
+api.add_resource(PublicCategoryResource, 'category')
