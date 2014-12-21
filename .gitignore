@@ -97,3 +97,5 @@ Session.vim
 .netrwhist
 *~
 
+### sqlite ###
+*.sqlite
